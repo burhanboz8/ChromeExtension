@@ -1,0 +1,24 @@
+{
+  "name": "Twitter Bot Detection",
+    "description": "An example project to detect bot users in twitter",
+    "background": {
+        "scripts": [
+            "background.js",
+            "jquery.min.js"
+        ]
+    },
+    "permissions": [
+      "tabs",
+      "<all_urls>"
+    ],
+    "version": "1.0.7",
+    "manifest_version": 2,
+    "icons": {"128": "icon.png"},
+    "browser_action": {
+        "default_title": "Click Me"
+    },
+  "content_scripts": [{
+      "matches": ["https://twitter.com/*"],
+      "js": ["open-dialog.js"]
+  }]
+}

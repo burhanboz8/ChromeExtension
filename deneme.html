@@ -1,0 +1,27 @@
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="extension.js"></script>
+  <script>
+    $(document).ready(function(){
+      send();
+    });
+  </script>
+</head>
+<body>
+  <button onclick="send()">Tikla</button>
+</body>
+</html>
+
+
+chrome.tabs.onUpdated.addListener(
+  function(tabId, changeInfo, tab) {
+    window.console.log('updated from background');
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("GET", "http://127.0.0.1:3546/test", false);
+    xhr.send();
+    var result = xhr.responseText;
+
+  }
+);
