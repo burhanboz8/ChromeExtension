@@ -2,59 +2,45 @@ chrome.tabs.onUpdated.addListener(
   function(tabId, changeInfo, tab) {
     if(tab.url.includes("twitter")){
       $.ajax({
-        method :"POST",
+        method :"GET",
+        dataType:"json",
         url: "http://127.0.0.1:3547/user",
         data : {
           "link" :tab.url,
         },
         success: function(result){
-            if(result == "Human"){
+            if(result.type == "Human"){
                 chrome.browserAction.setIcon({path:"icongreen.png"});
-            }else if(result == "Bot"){
+            }else if(result.type== "Bot"){
                 chrome.browserAction.setIcon({path:"iconred.png"});
             }else{
                 chrome.browserAction.setIcon({path:"icon.png"});
             }
         }
       });
+      $.ajax({
+        method :"GET",
+        dataType:"json",
+        url: "http://127.0.0.1:3547/user",
+        data : {
+          "link" :tab.url,
+        },
+        success: function(result){
+            var type = result.type;
+            var name = result.name;
+              $('#typeSpan').load("dialog.html",function(){
+                $('#typeSpan').text(type);
+              });
+              $('#userNameSpan').load("dialog.html",function(){
+                $('#userNameSpan').text(name);
+              });
+
+        },error: function (error) {
+                  console.log("hatali");
+              }
+      });
     }else{
         chrome.browserAction.setIcon({path:"icon.png"});
     }
   }
 );
-// Handle requests for passwords
-chrome.runtime.onMessage.addListener(function(request) {
-    if (request.type === 'request_type') {
-        chrome.tabs.create({
-            url: chrome.extension.getURL('dialog.html'),
-            active: false
-        }, function(tab) {
-            // After the tab has been created, open a window to inject the tab
-            chrome.windows.create({
-                tabId: tab.id,
-                type: 'popup',
-                focused: true
-                // incognito, top, left, ...
-            });
-        });
-    }
-});
-function setPassword(type) {
-  $.ajax({
-    method :"GET",
-    url: "http://127.0.0.1:3547/user",
-    data : {
-      "type" :type,
-    },
-    success: function (result) {
-              if (result == "Human") {
-                console.log('helal');
-              }
-      },
-              error: function (error) {
-                  console.log("hatali");
-              }
-  });
-};
-chrome.browserAction.onClicked.addListener(function (tab) {
-});
